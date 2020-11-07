@@ -1,3 +1,5 @@
+// splitpoints outputs ffmpeg commands for splitting an input file into a
+// series of video files without recoding.
 package main
 
 import (

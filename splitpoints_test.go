@@ -5,6 +5,14 @@ import (
 	"testing"
 )
 
+func Example() {
+	cmd, _ := splitCommand("00:00:01:18-00:10:11:09", "input.mov", "output.mov")
+	fmt.Println(cmd)
+
+	// Output:
+	// ffmpeg -ss 0:00:01.720 -i input.mov -to 0:10:09.640 -c copy output.mov
+}
+
 func TestTimeCode(t *testing.T) {
 	testCases := []struct {
 		in      string
@@ -58,33 +66,5 @@ func TestDecimal(t *testing.T) {
 			t.Errorf("%+v.decimal() = %q; want %q", tc.in, got, tc.want)
 		}
 
-	}
-}
-
-func TestCommand(t *testing.T) {
-	testCases := []struct {
-		in   string
-		want string
-	}{
-		{
-			"00:00:01:18-00:10:11:09",
-			"ffmpeg -ss 0:00:01.720 -i input.mov -to 0:10:09.640 -c copy output.mov",
-		},
-		{
-			"00:10:11:10-00:28:46:15",
-			"ffmpeg -ss 0:10:11.400 -i input.mov -to 0:18:35.200 -c copy output.mov",
-		},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.in, func(t *testing.T) {
-			got, err := splitCommand(tc.in, "input.mov", "output.mov")
-			if err != nil {
-				t.Fatal(err)
-			}
-			if got != tc.want {
-				t.Errorf("splitCommand diff.\nGot:  %s\nWant: %s", got, tc.want)
-			}
-		})
 	}
 }
